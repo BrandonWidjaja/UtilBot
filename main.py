@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from pydoc import cli
 import discord
 from discord.ext import commands
@@ -56,6 +57,44 @@ async def apod(ctx):
     await channel.send(embed=embed)
 
 
+@client.command()
+async def cocktail(ctx, *, ct_name: str):
+    ct_name.replace(" ", "_")
+    channel = ctx.message.channel
+
+    response = requests.get(
+        "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + ct_name)
+    json_data = json.loads(response.text)
+
+    if json_data['drinks'] is None:
+        embed = "Sorry, we couldn't find that drink"
+        await channel.send(embed)
+    else:
+        async with channel.typing():
+            curr_drink = json_data['drinks'][0]
+            embed = discord.Embed(title=f"Recipe for {curr_drink['strDrink']}",
+                                  color=ctx.guild.me.top_role.color,
+                                  timestamp=ctx.message.created_at,)
+
+            for num in range(1, 16):
+                curr_ingred = "strIngredient" + str(num)
+                curr_measure = "strMeasure" + str(num)
+                if curr_drink[curr_ingred] is not None:
+                    ingredient_val = "{measurement}".format(
+                        measurement=" " if curr_drink[curr_measure] == None else curr_drink[curr_measure])
+                    embed.add_field(
+                        name=f"{curr_drink[curr_ingred]}", value=f"{ingredient_val}", inline=False)
+
+            embed.add_field(
+                name="Instructions:", value=f"{curr_drink['strInstructions']}", inline=False)
+
+            embed.set_image(url=curr_drink['strDrinkThumb'])
+
+            embed.set_footer(
+                text=f"Requested by {ctx.author.name}")
+            await channel.send(embed=embed)
+
+
 @client.command(pass_context=True)
 async def help(ctx):
 
@@ -75,5 +114,6 @@ async def help(ctx):
         text=f"Requested by {ctx.author.name}")
 
     await channel.send(embed=embed)
+
 
 client.run(DISCORD_API)

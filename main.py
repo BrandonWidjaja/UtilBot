@@ -19,3 +19,5 @@ DISCORD_API = os.getenv("DISCORD_TOKEN")
 async def on_ready():
     print('Logged in as {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=""))
+
+client.run(DISCORD_API)

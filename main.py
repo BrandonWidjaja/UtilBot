@@ -31,6 +31,8 @@ async def ping(ctx):
 
 NASA_API = os.getenv("NASA_KEY")
 
+# astrology photo of the day from NASA API
+
 
 @client.command()
 async def apod(ctx):
@@ -57,6 +59,9 @@ async def apod(ctx):
     await channel.send(embed=embed)
 
 
+# cocktail api from cocktaildb API
+
+
 @client.command()
 async def cocktail(ctx, *, ct_name: str):
     ct_name.replace(" ", "_")
@@ -81,7 +86,7 @@ async def cocktail(ctx, *, ct_name: str):
                 curr_measure = "strMeasure" + str(num)
                 if curr_drink[curr_ingred] is not None:
                     ingredient_val = "{measurement}".format(
-                        measurement=" " if curr_drink[curr_measure] == None else curr_drink[curr_measure])
+                        measurement="-" if curr_drink[curr_measure] == None else curr_drink[curr_measure])
                     embed.add_field(
                         name=f"{curr_drink[curr_ingred]}", value=f"{ingredient_val}", inline=False)
 
@@ -93,6 +98,9 @@ async def cocktail(ctx, *, ct_name: str):
             embed.set_footer(
                 text=f"Requested by {ctx.author.name}")
             await channel.send(embed=embed)
+
+
+# help command
 
 
 @client.command(pass_context=True)

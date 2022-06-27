@@ -108,8 +108,9 @@ async def help(ctx):
     embed.add_field(name=f'{seperator}ping',
                     value='Returns ping of the bot\n**Usage**: !util ping', inline=False)
     embed.add_field(name=f'{seperator}apod',
-                    value='Returns NASA\'s Astrology Picture of the Day\n**Usage**: !util apod', inline=False)
-
+                    value='Displays NASA\'s Astrology Picture of the Day\n**Usage**: !util apod', inline=False)
+    embed.add_field(name=f'{seperator}cocktail',
+                    value='Attempts to find the recipe for a cocktail\n**Usage**: !util cocktail <cocktail name>', inline=False)
     embed.set_footer(
         text=f"Requested by {ctx.author.name}")
 
